@@ -5,21 +5,22 @@ import _ from 'lodash';
 export default class SearchPage extends Component {
  
     constructor(props) {
+
         super(props);
+
         this.state = {
             comics: []
         }
-        const comics = this.props.comicTiles;
         
         
     }
 
     render() {
-        console.log("Search: ", this.state.comics);
+        //console.log("Search: ", this.state.comics);
         return ( 
             
             <div><input type="text" value="" /><button className="search_button">Search!</button>
-            </div>
+            {this.props.comicTiles}</div>
                );
     }
 }

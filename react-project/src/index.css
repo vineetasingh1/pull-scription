@@ -125,6 +125,28 @@ top: 36px;
 background: #E45959;
 }
 
+.logout_button { 
+    font-size: 14px;
+    border: none;
+    position: absolute;
+    width: 108px;
+    height: 32px;
+    left: 90%;
+    top: 36px;
+    background: #E45959;
+}
+
+.signup_button { 
+    font-size: 14px;
+    border: none;
+    position: absolute;
+    width: 108px;
+    height: 32px;
+    left: 90%;
+    top: 75px;
+    background: #E45959;
+}
+
 .tile {
 position: relative;
 margin-left: 50px;

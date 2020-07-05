@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, Fade  } from 'reactstrap';
-import _ from 'lodash';
- 
+import PropTypes from 'prop-types';
+
+ /*
 const validationMethods =  {
     required : (field, value) => {
         if (!value.toString().trim().length) {
@@ -46,93 +46,56 @@ const runValidationRules  = (element, errors) => {
  
     return errors;
 }
+ */
  
- 
-export default class Login extends Component {
+export default class LoginForm extends React.Component {
  
     constructor(props) {
+
         super(props);
+
         this.state = {
-            email: '',
+            username: '',
             password: '',
             errors: []
         }
+
     }
 
-    login = (event) => {
- 
-        event.preventDefault();
- 
-        const formElements = validateForm("loginForm");
- 
-        formElements.forEach(element=> {
-           const errors = runValidationRules(element, this.state.errors);
-            this.setState({
-                errors: errors
-            });
-        })
- 
-        const email = this.state.email;
-        const password = this.state.password;
-        const errors =  this.state.errors;
-        console.log(email, password, errors);
-    }
- 
-    handleChange = (event) => {
-        const target = event.target;
-        const field =  target.name;
-        const value = target.value
- 
-        const errors = runValidationRules(target, this.state.errors);
- 
-        this.setState({
-            errors: errors
+    handle_change = e => {
+        const name = e.target.name;
+        const value = e.target.value;
+        this.setState(prevstate => {
+          const newState = { ...prevstate };
+          newState[name] = value;
+          return newState;
         });
- 
-        this.setState({
-            [field]:  value
-        });
-    }
+      };
  
     render() {
         return (
-            <div className="container">
-                <Form id="loginForm" method="post" onSubmit={this.login}>
-                    <FormGroup>
-                        <Label for="email">Email</Label>
-                        <Input
-                            type="text"
-                            validations={['required','isEmail']}
-                            name="email"
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                            id="email"
-                            placeholder="Enter your email address."
-                        />
-                      <FromValidationError field={this.state.errors.email} />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="password">Password</Label>
-                        <Input
-                            type="password"
-                            validations={['required']}
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            id="password"
-                            placeholder="Enter your password."
-                        />
-                        <FromValidationError field={this.state.errors.password} />
-                    </FormGroup>
-                    <Button>Login</Button>
-                </Form>
-            </div>
+            <form onSubmit={e => this.props.handle_login(e, this.state)}>
+                <h4>Log In</h4>
+                <label htmlFor="username">Username:</label>
+                <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this.handle_change}
+                />
+                <label htmlFor="password">Password</label>
+                <input
+                type="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handle_change}
+                />
+                <input type="submit" />
+            </form>
         );
     }
 }
- 
-const FromValidationError = props => (
-    <Fade in={Boolean(props.field)}  tag="p" className="error">
-       { props.field ?  Object.values(props.field).shift() : '' } 
-  </Fade>
-);
+
+LoginForm.propTypes = {
+  handle_login: PropTypes.func.isRequired
+};

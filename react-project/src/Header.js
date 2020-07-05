@@ -8,8 +8,10 @@ import {
 import './index.css';
 
 import ComicBookTile from './ComicBookTile';
+import SignInBox from './SignInBox';
 import Login from './login';
 import SearchPage from './Search';
+import SignUpForm from './SignUp';
 
 import searchIcon from './assets/search1.svg';
 import browseIcon from './assets/browse1.svg';
@@ -21,7 +23,10 @@ export default class Header extends React.Component {
         this.state = {
             comics: {},
             pulledComics: [],
-            tiles: []
+            tiles: [],
+            displayed_form: '',
+            logged_in: localStorage.getItem('token') ? true : false,
+            username: ''
         };
         
     }
@@ -36,6 +41,17 @@ export default class Header extends React.Component {
     }
 
     async componentDidMount() {
+        if (this.state.logged_in) {
+            fetch('http://173.255.241.100:8000/current_user/', {
+              headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+              }
+            })
+              .then(res => res.json())
+              .then(json => {
+                this.setState({ username: json.username });
+              });
+          }
         //console.log(comics);
         const self = this;
         let request = "http://173.255.241.100:8000/api/comics/";
@@ -96,7 +112,59 @@ export default class Header extends React.Component {
         );
     }
     
-
+    handle_login = (e, data) => {
+        console.log("In Handle_login");
+        e.preventDefault();
+        fetch('http://173.255.241.100:8000/token-auth/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        
+          .then(res => res.json())
+          .then(json => {
+            localStorage.setItem('token', json.token);
+            this.setState({
+              logged_in: true,
+              displayed_form: '',
+              username: json.user.username
+            });
+          });
+          console.log("after token set");
+      };
+    
+      handle_signup = (e, data) => {
+        e.preventDefault();
+        fetch('http://173.255.241.100:8000/users/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(res => res.json())
+          .then(json => {
+            localStorage.setItem('token', json.token);
+            this.setState({
+              logged_in: true,
+              displayed_form: '',
+              username: json.username
+            });
+          });
+      };
+    
+      handle_logout = () => {
+        localStorage.removeItem('token');
+        this.setState({ logged_in: false, username: '' });
+      };
+    
+      display_form = form => {
+        this.setState({
+          displayed_form: form
+        });
+      };
 
     render() {
 
@@ -131,19 +199,26 @@ export default class Header extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <button className = "login_button" ><Link to="/login">Sign In</Link></button>
+                        <SignInBox />
                     </nav>
                 </header>
-                
+                <SignInBox 
+                  logged_in={this.state.logged_in}
+                  display_form={this.display_form}
+                  handle_logout={this.handle_logout}
+                />
             </div>
     
         <Switch>
         <Route path="/login">
-            <SignIn />
+            <SignIn handle_login={this.handle_login} />
+          </Route>
+          <Route path="/signup">
+            <SignUp />
           </Route>
           <Route path="/search">
-              {console.log("Comic Tiles Within Search:" ,this.state.tiles)}
-            <Search comicTiles={this.state.tiles}  />
+        {/*console.log("Comic Tiles Within Search:" ,this.state.tiles*/}
+            <Search comicTiles={this.state.tiles} />
           </Route>
           <Route path="/pull">
             <Pull />
@@ -167,7 +242,7 @@ function Browse({comicTiles}) {
     );
   }
   
-  function Search(comicTiles) {
+  function Search({comicTiles}) {
     return (
         <div className="content_box"><h2>Search</h2><br /><br /><SearchPage comicTiles={comicTiles}/></div>
     );
@@ -178,8 +253,13 @@ function Browse({comicTiles}) {
         <div className="content_box"><h2>Pull List</h2><br /><br />YOU'LL SEE IT SOON!</div>
     );
   }
-  function SignIn() {
+  function SignIn({handle_login}) {
     return (
-        <div className="content_box"><h2>Sign In</h2><br /><br /><Login /></div>
+        <div className="content_box"><h2>Sign In</h2><br /><br /><Login handle_login={handle_login}/></div>
+    );
+  }
+  function SignUp() {
+    return (
+        <div className="content_box"><h2>Sign Up!</h2><br /><br /><SignUpForm /></div>
     );
   }
