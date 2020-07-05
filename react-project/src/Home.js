@@ -157,7 +157,7 @@ export default class Home extends React.Component {
 
     }
 
-    pull = (newComic) => {
+    /*pull = (newComic) => {
         const {pulledComics} = this.state;
         let newPulledComics = pulledComics;
         newPulledComics.push(newComic);
@@ -179,7 +179,7 @@ export default class Home extends React.Component {
             pulledComics: newPulledComics,
         });
     }
-
+    */
     // getComics = async () => {
     //     var result = {};
     //     const comicsRequest = new Request("http://173.255.241.100:8000/api/comics/");

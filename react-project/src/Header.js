@@ -35,6 +35,29 @@ export default class Header extends React.Component {
         //console.log(comics);
     }
 
+    pull = (newComic) => {
+        const {pulledComics} = this.state;
+        let newPulledComics = pulledComics;
+        newPulledComics.push(newComic);
+        this.setState({
+            pulledComics: newPulledComics,
+        });
+    }
+
+    unpull = (removedComic) => {
+        const {pulledComics} = this.state;
+        let comicNo = removedComic.diamd_no;
+        let newPulledComics = pulledComics;
+        for (let i = 0; i < newPulledComics.length; i++){
+            if (comicNo === newPulledComics[i].diamd_no){
+                newPulledComics.splice(i, 1);
+            }
+        }
+        this.setState({
+            pulledComics: newPulledComics,
+        });
+    }
+
     async componentDidMount() {
         //console.log(comics);
         const self = this;
@@ -146,7 +169,7 @@ export default class Header extends React.Component {
             <Search comicTiles={this.state.tiles}  />
           </Route>
           <Route path="/pull">
-            <Pull />
+            <Pull pulledTiles={this.state.pulledComics}/>
           </Route>
           <Route path="/">
             <Browse comicTiles={this.state.tiles} />
@@ -173,9 +196,9 @@ function Browse({comicTiles}) {
     );
   }
   
-  function Pull() {
+  function Pull(pulledTiles) {
     return (
-        <div className="content_box"><h2>Pull List</h2><br /><br />YOU'LL SEE IT SOON!</div>
+        <div className="content_box"><h2>Pull List</h2><br /><br /><PullList pulledTiles={pulledTiles}/></div>
     );
   }
   function SignIn() {

@@ -7,7 +7,7 @@ export default class PullList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pulledComics: []
+            pulledComics: this.props.pulledTiles
         };
     }
 
