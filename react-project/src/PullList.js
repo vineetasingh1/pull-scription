@@ -22,7 +22,7 @@ export default class PullList extends Component {
         let comicId = removedComic.diamd_no;
         let newPulledComics = pulledComics;
         for (let i = 0; i < newPulledComics.length; i++){
-            if (eventId === newPulledComics[i].diamd_no){
+            if (comicId === newPulledComics[i].diamd_no){
                 newPulledComics.splice(i, 1);
             } 
         }
@@ -36,9 +36,9 @@ export default class PullList extends Component {
             <ComicBookTile
                 comicInfo={info}
                 eventInfo={{
-                    fullTitle: this.props.comics.full_title,
-                    writer: this.props.comics.writer,
-                    price: "$"+this.props.comics.price
+                    fullTitle: pulledComics.full_title,
+                    writer: pulledComics.writer,
+                    price: "$"+pulledComics.price
                 }}
             onAddComic={() => {}}
             onRemoveComic={this.removeFromPulledComics}
