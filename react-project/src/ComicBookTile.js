@@ -13,7 +13,7 @@ export default class ComicBookTile extends React.Component {
             showPopUp: false,
         };
     }
-    /*
+
     addComic() {
         const {onAddComic, comicInfo} = this.props;
         let comicAdded = this.state.isComicAdded;
@@ -31,7 +31,7 @@ export default class ComicBookTile extends React.Component {
         });
         onRemoveComic(comicInfo);
     }
-    */
+    
 
     togglePopUp() {
         this.setState ({
