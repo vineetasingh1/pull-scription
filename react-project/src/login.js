@@ -58,9 +58,7 @@ export default class Login extends Component {
             errors: []
         }
     }
- 
- 
- 
+
     login = (event) => {
  
         event.preventDefault();
@@ -126,7 +124,7 @@ export default class Login extends Component {
                         />
                         <FromValidationError field={this.state.errors.password} />
                     </FormGroup>
-                    <Button>login</Button>
+                    <Button>Login</Button>
                 </Form>
             </div>
         );
