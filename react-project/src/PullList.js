@@ -48,7 +48,7 @@ export default class PullList extends Component {
 
     render() {
         return (
-            
+            <title>Pull List</title>
         );
     }
 }
