@@ -1,7 +1,7 @@
 # Pullscription.com
 
 
-Here is a fully working (but not complete) backend/frontend for pullscription.com! It includes all dependencies and associated files for ease of portability!
+Here is a fully working (but not complete) backend/frontend for pullscription.com! 
 
 Here are instructions how to set it up:
 
