@@ -42,7 +42,7 @@ export default class Header extends React.Component {
 
     async componentDidMount() {
         if (this.state.logged_in) {
-            fetch('http://173.255.241.100:8000/current_user/', {
+            fetch('http://localhost:8000/current_user/', {
               headers: {
                 Authorization: `JWT ${localStorage.getItem('token')}`
               }
@@ -115,7 +115,7 @@ export default class Header extends React.Component {
     handle_login = (e, data) => {
         console.log("In Handle_login");
         e.preventDefault();
-        fetch('http://173.255.241.100:8000/token-auth/', {
+        fetch('http://localhost:8000/token-auth/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ export default class Header extends React.Component {
     
       handle_signup = (e, data) => {
         e.preventDefault();
-        fetch('http://173.255.241.100:8000/users/', {
+        fetch('http://localhost:8000/users/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

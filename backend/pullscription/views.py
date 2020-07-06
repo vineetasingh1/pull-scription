@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer, UserSerializerWithToken
 
-@api_view(['POST'])
+@api_view(['GET'])
 def current_user(request):
     """
     Determine the current user by their token, and return their data
@@ -22,7 +22,6 @@ def current_user(request):
 
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
-
 
 class UserList(APIView):
     """
