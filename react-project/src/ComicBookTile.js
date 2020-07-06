@@ -53,7 +53,8 @@ export default class ComicBookTile extends React.Component {
                         <img className = "tile_img comic_thumbnail" src={"http://www.pullscription.com/pictures/" + this.props.eventInfo.image} />
                     </div>
                     <p className = "tile_price">{this.props.eventInfo.price}</p>
-                    <button className = "tile_pull" href = "#">+</button>
+                    <button className = "tile_pull" onClick = {
+                        this.state.isComicAdded ? this.unaddComic.bind(this) : this.addComic.bind(this)}>+</button>
                 </div>
             </div>
         );
