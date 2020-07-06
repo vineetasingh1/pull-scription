@@ -15,8 +15,39 @@ export default class PullList extends Component {
         this.setState({
             pulledComics: this.props.pulledTiles
         });
-    }
 
+        let pulledArray = [];
+        for (let i = 0; i < this.state.pulledComics.length; i++){
+            let comic = this.state.pulledComics[i];
+            pulledArray.push(comic);
+        };
+
+        const pulledComics = pulledArray.map(
+            (comic) => {
+                return 
+                    <ComicBookTile
+                        comicInfo={{
+                            fullTitle: comic.full_title,
+                            writer: comic.writer,
+                            price: "$"+comic.price,
+                            upc_no: comic.upc_no,
+                            image: comic.stock_no+".jpg",
+                            publisher: comic.publisher
+                        }}
+                        eventInfo={{
+                            fullTitle: comic.full_title,
+                            writer: comic.writer,
+                            price: "$"+comic.price,
+                            image: comic.stock_no+".jpg"
+                        }}
+                        onAddComic={() => {}}
+                        onRemoveComic={this.removeFromPulledComics}
+                    />
+            }
+        );
+        this.setState({pulledComics: pulledComics})
+    }
+    
     removeFromPulledComics = (removedComic) => {
         const {pulledComics} = this.state;
         let comicNo = removedComic.diamd_no;
@@ -31,24 +62,9 @@ export default class PullList extends Component {
         });
     }
 
-    renderComicBookTile = (info) => {
-        return (
-            <ComicBookTile
-                comicInfo={info}
-                eventInfo={{
-                    fullTitle: pulledComics.full_title,
-                    writer: pulledComics.writer,
-                    price: "$"+pulledComics.price
-                }}
-            onAddComic={() => {}}
-            onRemoveComic={this.removeFromPulledComics}
-            />
-        );
-    }
-
     render() {
         return (
-            <title>Pull List</title>
+            <div>{this.state.pulledComics}</div>
         );
     }
 }
