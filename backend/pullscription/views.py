@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer, UserSerializerWithToken
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def current_user(request):
     """
     Determine the current user by their token, and return their data
@@ -22,7 +22,6 @@ def current_user(request):
 
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
-
 
 class UserList(APIView):
     """
@@ -41,7 +40,7 @@ class UserList(APIView):
 
 class ComicsAPI(viewsets.ModelViewSet):
     serializer_class = ComicsSerializer
-    queryset = Comics.objects.all()
+    queryset = Comics.objects.all()[:50]
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['artist','title', 'writer']
 
@@ -50,7 +49,7 @@ class ComicsAPI(viewsets.ModelViewSet):
         Optionally restricts the returned purchases to a given user,
         by filtering against a `writer` query parameter in the URL.
         """
-        queryset = Comics.objects.all()
+        queryset = Comics.objects.all()[:50]
         main_desc = self.request.query_params.get('main_desc', None)
         if main_desc is not None:
             queryset = queryset.filter(main_desc = main_desc)

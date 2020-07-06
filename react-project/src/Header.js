@@ -23,7 +23,7 @@ export default class Header extends React.Component {
             pulledComics: [],
             tiles: []
         };
-        
+        //console.log("After constructor: ", this.state.logged_in);
     }
 
     getComics = async (request) => {
@@ -102,6 +102,19 @@ export default class Header extends React.Component {
         );
         self.setState({tiles:tiles});
             //console.log(this.state.tiles);
+        if (this.state.logged_in) {
+          //console.log("inside componentDidMount, logged in being true,", this.state.logged_in);
+            fetch('http://173.255.241.100:8000/current_user/', {
+              headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+              }
+            })
+              .then(res => res.json())
+              .then(json => {
+                this.setState({ username: json.username });
+              });
+              //console.log("inside componentDidMount, logged in being true, username set?", this.state.username);
+          }
     }
 
     renderComicBookTile = (info) => {
@@ -119,7 +132,54 @@ export default class Header extends React.Component {
         );
     }
     
-
+    handle_login = (e, data) => {
+        //console.log("In Handle_login");
+        e.preventDefault();
+        fetch('http://173.255.241.100:8000/token-auth/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        
+          .then(res => res.json())
+          .then(json => {
+            localStorage.setItem('token', json.token);
+            this.setState({
+              logged_in: true,
+              displayed_form: '',
+              username: json.user.username
+            });
+          });
+          console.log("after token set (logged in, username) :", this.state.logged_in, this.state.username);
+      };
+    
+      handle_signup = (e, data) => {
+        e.preventDefault();
+        fetch('http://173.255.241.100:8000/users/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(res => res.json())
+          .then(json => {
+            localStorage.setItem('token', json.token);
+            this.setState({
+              logged_in: true,
+              displayed_form: '',
+              username: json.username
+            });
+          });
+      };
+    
+      handle_logout = () => {
+        localStorage.removeItem('token');
+        this.setState({ logged_in: false, username: '' });
+        console.log("Logout Function called!");
+      };
 
     render() {
 
@@ -157,12 +217,26 @@ export default class Header extends React.Component {
                         <button className = "login_button" ><Link to="/login">Sign In</Link></button>
                     </nav>
                 </header>
+<<<<<<< HEAD
+=======
+                <SignInBox 
+                  logged_in={this.state.logged_in}
+                  handle_logout={this.handle_logout}
+                />
+>>>>>>> master
                 
             </div>
     
         <Switch>
         <Route path="/login">
+<<<<<<< HEAD
             <SignIn />
+=======
+            <SignIn handle_login={this.handle_login} />
+          </Route>
+          <Route path="/signup">
+            <SignUp handle_signup={this.handle_signup} />
+>>>>>>> master
           </Route>
           <Route path="/search">
               {console.log("Comic Tiles Within Search:" ,this.state.tiles)}
@@ -201,8 +275,14 @@ function Browse({comicTiles}) {
         <div className="content_box"><h2>Pull List</h2><br /><br /><PullList pulledTiles={pulledTiles}/></div>
     );
   }
+<<<<<<< HEAD
   function SignIn() {
     return (
         <div className="content_box"><h2>Sign In</h2><br /><br /><Login /></div>
+=======
+  function SignUp(handle_signup) {
+    return (
+        <div className="content_box"><h2>Sign Up!</h2><br /><br /><SignUpForm handle_signup={handle_signup} /></div>
+>>>>>>> master
     );
   }
