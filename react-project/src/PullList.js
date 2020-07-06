@@ -19,10 +19,10 @@ export default class PullList extends Component {
 
     removeFromPulledComics = (removedComic) => {
         const {pulledComics} = this.state;
-        let comicId = removedComic.diamd_no;
+        let comicNo = removedComic.diamd_no;
         let newPulledComics = pulledComics;
         for (let i = 0; i < newPulledComics.length; i++){
-            if (comicId === newPulledComics[i].diamd_no){
+            if (comicNo === newPulledComics[i].diamd_no){
                 newPulledComics.splice(i, 1);
             } 
         }
