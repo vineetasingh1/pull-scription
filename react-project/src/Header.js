@@ -28,7 +28,7 @@ export default class Header extends React.Component {
             logged_in: localStorage.getItem('token') ? true : false,
             username: ''
         };
-        
+        //console.log("After constructor: ", this.state.logged_in);
     }
 
     getComics = async (request) => {
@@ -41,17 +41,6 @@ export default class Header extends React.Component {
     }
 
     async componentDidMount() {
-        if (this.state.logged_in) {
-            fetch('http://localhost:8000/current_user/', {
-              headers: {
-                Authorization: `JWT ${localStorage.getItem('token')}`
-              }
-            })
-              .then(res => res.json())
-              .then(json => {
-                this.setState({ username: json.username });
-              });
-          }
         //console.log(comics);
         const self = this;
         let request = "http://173.255.241.100:8000/api/comics/";
@@ -95,6 +84,19 @@ export default class Header extends React.Component {
         );
         self.setState({tiles:tiles});
             //console.log(this.state.tiles);
+        if (this.state.logged_in) {
+          //console.log("inside componentDidMount, logged in being true,", this.state.logged_in);
+            fetch('http://173.255.241.100:8000/current_user/', {
+              headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+              }
+            })
+              .then(res => res.json())
+              .then(json => {
+                this.setState({ username: json.username });
+              });
+              //console.log("inside componentDidMount, logged in being true, username set?", this.state.username);
+          }
     }
 
     renderComicBookTile = (info) => {
@@ -113,9 +115,9 @@ export default class Header extends React.Component {
     }
     
     handle_login = (e, data) => {
-        console.log("In Handle_login");
+        //console.log("In Handle_login");
         e.preventDefault();
-        fetch('http://localhost:8000/token-auth/', {
+        fetch('http://173.255.241.100:8000/token-auth/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -132,12 +134,12 @@ export default class Header extends React.Component {
               username: json.user.username
             });
           });
-          console.log("after token set");
+          console.log("after token set (logged in, username) :", this.state.logged_in, this.state.username);
       };
     
       handle_signup = (e, data) => {
         e.preventDefault();
-        fetch('http://localhost:8000/users/', {
+        fetch('http://173.255.241.100:8000/users/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -158,12 +160,7 @@ export default class Header extends React.Component {
       handle_logout = () => {
         localStorage.removeItem('token');
         this.setState({ logged_in: false, username: '' });
-      };
-    
-      display_form = form => {
-        this.setState({
-          displayed_form: form
-        });
+        console.log("Logout Function called!");
       };
 
     render() {
@@ -204,9 +201,9 @@ export default class Header extends React.Component {
                 </header>
                 <SignInBox 
                   logged_in={this.state.logged_in}
-                  display_form={this.display_form}
                   handle_logout={this.handle_logout}
                 />
+                
             </div>
     
         <Switch>
@@ -214,7 +211,7 @@ export default class Header extends React.Component {
             <SignIn handle_login={this.handle_login} />
           </Route>
           <Route path="/signup">
-            <SignUp />
+            <SignUp handle_signup={this.handle_signup} />
           </Route>
           <Route path="/search">
         {/*console.log("Comic Tiles Within Search:" ,this.state.tiles*/}
@@ -258,8 +255,8 @@ function Browse({comicTiles}) {
         <div className="content_box"><h2>Sign In</h2><br /><br /><Login handle_login={handle_login}/></div>
     );
   }
-  function SignUp() {
+  function SignUp(handle_signup) {
     return (
-        <div className="content_box"><h2>Sign Up!</h2><br /><br /><SignUpForm /></div>
+        <div className="content_box"><h2>Sign Up!</h2><br /><br /><SignUpForm handle_signup={handle_signup} /></div>
     );
   }
