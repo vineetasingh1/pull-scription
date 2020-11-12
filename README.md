@@ -13,7 +13,7 @@ Open a terminal. Type the following commands in this order:
 
 `ssh vineetasingh@173.255.241.100`
 
-password: apple
+password: redacted
 
 ```
 cd backend
